@@ -20,12 +20,16 @@ class MainWidget extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
         accentColor: Colors.amber.shade500,
+        errorColor: Colors.red.shade300,
         fontFamily: "Quicksand",
         textTheme: ThemeData.light().textTheme.copyWith(
               headline6: TextStyle(
                 fontFamily: "OpenSans",
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
+              ),
+              button: TextStyle(
+                color: Colors.white,
               ),
             ),
         appBarTheme: AppBarTheme(
@@ -73,11 +77,12 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String txTitle, double txAmount) {
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
-      date: DateTime.now(),
+      date: chosenDate,
       id: DateTime.now().toString(),
     );
     setState(() {
@@ -95,6 +100,12 @@ class _HomePageState extends State<HomePage> {
             child: NewTransaction(_addNewTransaction),
           );
         });
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((tx) => tx.id == id);
+    });
   }
 
   @override
@@ -116,16 +127,8 @@ class _HomePageState extends State<HomePage> {
           // mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            // Container(
-            //   width: double.infinity,
-            //   child: Card(
-            //     color: Colors.green,
-            //     child: Text("Chart!"),
-            //     elevation: 5,
-            //   ),
-            // ),
             Chart(_recentTransactions),
-            TransactionList(transactions: _userTransactions),
+            TransactionList(_userTransactions, _deleteTransaction),
           ],
         ),
       ),
