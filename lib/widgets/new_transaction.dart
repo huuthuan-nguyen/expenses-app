@@ -81,6 +81,7 @@ class _NewTransactionState extends State<NewTransaction> {
               Container(
                 height: 70,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(_selectedDate == null
                         ? "No Date Chosen!"
